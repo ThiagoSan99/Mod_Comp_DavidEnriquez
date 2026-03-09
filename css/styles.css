@@ -1,0 +1,137 @@
+body{
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+table{
+    border-collapse: collapse;
+    width: 70%;
+    margin: 30px auto;
+    background-color: white;
+}
+
+th, td{
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+th{
+    background-color: #34495e;
+    color: white;
+}
+
+tr:nth-child(even){
+    background-color: #ecf0f1;
+}
+
+h1{
+    text-align: center;
+}
+
+.btn-container{
+    width: 70%;
+    margin: 0 auto;
+    text-align: right;
+}
+
+.btn-agregar{
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #27ae60;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.btn-agregar:hover{
+    background-color: #219150;
+}
+.btn-editar{
+    background-color: #2980b9;
+    color: white;
+    padding: 6px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.btn-editar:hover{
+    background-color: #21618c;
+}
+
+.btn-eliminar{
+    background-color: #c0392b;
+    color: white;
+    padding: 6px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn-eliminar:hover{
+    background-color: #922b21;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0; /* reemplaza top, left, width, height */
+
+    background-color: rgba(0, 0, 0, 0.6);
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 999;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    animation: aparecer 0.25s ease-in-out;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-content label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.modal-content input {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@keyframes aparecer {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.close {
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+}
