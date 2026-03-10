@@ -7,13 +7,13 @@ require_once("Conection/conect.php");
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Asignaturas</title>
+    <title>Asignaturas</title>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
 
@@ -33,6 +33,7 @@ require_once("Conection/conect.php");
                 <!-- ============================= -->
                 <!-- GESTIÓN DE ASIGNATURAS -->
                 <!-- ============================= -->
+
                 <div class="card mt-4">
 
                     <div class="card-header bg-primary">
@@ -52,7 +53,6 @@ require_once("Conection/conect.php");
                         <table class="table table-bordered table-hover">
 
                             <thead class="thead-dark">
-
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Código</th>
@@ -60,7 +60,6 @@ require_once("Conection/conect.php");
                                     <th>Horario</th>
                                     <th width="150">Acciones</th>
                                 </tr>
-
                             </thead>
 
                             <tbody id="tablaAsignaturas"></tbody>
@@ -75,21 +74,23 @@ require_once("Conection/conect.php");
                 <!-- ============================= -->
                 <!-- ASIGNAR ASIGNATURA -->
                 <!-- ============================= -->
+
                 <div class="card mt-4">
 
                     <div class="card-header bg-primary">
-                        <h3 class="card-title">
-                            Asignar Asignatura a Estudiante
-                        </h3>
+                        <h3 class="card-title">Asignaciones a Estudiante</h3>
                     </div>
 
                     <div class="card-body">
 
                         <form id="formAsignacion">
-                            <input type="hidden" id="id_asig" name="id">
+
+                            <input type="hidden" id="id_asignacion" name="id">
+
                             <div class="row">
 
                                 <!-- ESTUDIANTE -->
+
                                 <div class="col-md-6">
 
                                     <label>Estudiante</label>
@@ -101,7 +102,7 @@ require_once("Conection/conect.php");
                                         <?php
                                         $stmt = $myPDO->query("SELECT id_est, name FROM Estudiante");
 
-                                        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                             echo "<option value='{$row['id_est']}'>{$row['name']}</option>";
                                         }
                                         ?>
@@ -110,7 +111,9 @@ require_once("Conection/conect.php");
 
                                 </div>
 
+
                                 <!-- ASIGNATURA -->
+
                                 <div class="col-md-6">
 
                                     <label>Asignatura</label>
@@ -122,7 +125,7 @@ require_once("Conection/conect.php");
                                         <?php
                                         $stmt = $myPDO->query("SELECT id_asig, name FROM asignaturas");
 
-                                        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                             echo "<option value='{$row['id_asig']}'>{$row['name']}</option>";
                                         }
                                         ?>
@@ -151,46 +154,49 @@ require_once("Conection/conect.php");
                 <!-- ============================= -->
                 <!-- LISTA DE ASIGNACIONES -->
                 <!-- ============================= -->
+
                 <div class="card mt-4">
 
                     <div class="card-header bg-dark">
                         <h3 class="card-title">Asignaciones</h3>
-                        </div>
+                    </div>
 
-                        <div class="card-body">
+                    <div class="card-body">
 
                         <table class="table table-bordered">
 
-                        <thead>
-                            <tr>
-                                <th>Estudiante</th>
-                                <th>Asignatura</th>
-                                <th>Código</th>
-                                <th>Profesor</th>
-                                <th>Horario</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
+                            <thead>
+                                <tr>
+                                    <th>Estudiante</th>
+                                    <th>Asignatura</th>
+                                    <th>Código</th>
+                                    <th>Profesor</th>
+                                    <th>Horario</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
 
-                        <tbody id="tablaAsignaciones"></tbody>
+                            <tbody id="tablaAsignaciones"></tbody>
 
                         </table>
-
-                        </div>
-                        </div>
-
-                                    </div>
-
-                                </section>
 
                     </div>
 
                 </div>
 
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
 
 <!-- ============================= -->
 <!-- MODAL ASIGNATURA -->
 <!-- ============================= -->
+
 <div class="modal fade" id="modalAsignatura">
 
     <div class="modal-dialog">
@@ -207,12 +213,11 @@ require_once("Conection/conect.php");
 
             </div>
 
-
             <form id="formAsignatura">
-                <input type="hidden" id="id_asig" name="id_asig">
-                <div class="modal-body">
 
-                    <input type="hidden" id="id_asig" name="id_asig">
+                <input type="hidden" id="id_asig" name="id_asig">
+
+                <div class="modal-body">
 
                     <div class="form-group">
 
@@ -229,7 +234,19 @@ require_once("Conection/conect.php");
                     </div>
 
 
-                    
+                    <div class="form-group">
+
+                        <label>Código</label>
+
+                        <input
+                            type="text"
+                            name="cod"
+                            id="cod"
+                            class="form-control"
+                            readonly
+                        >
+
+                    </div>
 
 
                     <div class="form-group">
@@ -305,6 +322,7 @@ require_once("Conection/conect.php");
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="js/asignaturas.js"></script>
 
 </body>

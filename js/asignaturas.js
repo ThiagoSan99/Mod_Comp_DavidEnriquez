@@ -4,19 +4,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const formAsignatura = document.getElementById("formAsignatura");
     const formAsignacion = document.getElementById("formAsignacion");
 
-    /* =========================
-       UTIL
-    ========================= */
-
     function parseData(data) {
         if (Array.isArray(data)) return data;
         if (data.data) return data.data;
         return [];
     }
 
-    /* =========================
-       LISTAR ASIGNATURAS
-    ========================= */
+    /* =============================
+       CARGAR ASIGNATURAS
+    ============================= */
 
     function cargarAsignaturas() {
 
@@ -27,13 +23,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 data = parseData(data);
 
                 const tbody = document.getElementById("tablaAsignaturas");
-                if (!tbody) return;
-
                 tbody.innerHTML = "";
 
                 data.forEach(asig => {
 
-                    const fila = `
+                    tbody.innerHTML += `
                     <tr>
                         <td>${asig.name}</td>
                         <td>${asig.cod ?? ''}</td>
@@ -41,79 +35,27 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td>${asig.schedule}</td>
 
                         <td>
-                            <button class="btn btn-warning btn-sm btn-editar" data-id="${asig.id_asig}">
+
+                            <button class="btn btn-warning btn-sm editar" data-id="${asig.id_asig}">
                                 <i class="fas fa-edit"></i>
                             </button>
 
-                            <button class="btn btn-danger btn-sm btn-eliminar" data-id="${asig.id_asig}">
+                            <button class="btn btn-danger btn-sm eliminar" data-id="${asig.id_asig}">
                                 <i class="fas fa-trash"></i>
                             </button>
+
                         </td>
                     </tr>
                     `;
-
-                    tbody.innerHTML += fila;
-
                 });
 
                 activarBotonesAsignaturas();
-
             });
-
     }
 
-    /* =========================
-       LISTAR ASIGNACIONES
-    ========================= */
-
-    function cargarAsignaciones() {
-
-        fetch("api/asignaciones.php?action=list")
-            .then(res => res.json())
-            .then(data => {
-
-                data = parseData(data);
-
-                const tbody = document.getElementById("tablaAsignaciones");
-                if (!tbody) return;
-
-                tbody.innerHTML = "";
-
-                data.forEach(a => {
-
-                    const fila = `
-                    <tr>
-                        <td>${a.estudiante}</td>
-                        <td>${a.asignatura}</td>
-                        <td>${a.cod ?? ''}</td>
-                        <td>${a.teacher}</td>
-                        <td>${a.schedule}</td>
-
-                        <td>
-                            <button class="btn btn-warning btn-sm btn-editar-asig" data-id="${a.id}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-
-                            <button class="btn btn-danger btn-sm btn-eliminar-asig" data-id="${a.id}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    `;
-
-                    tbody.innerHTML += fila;
-
-                });
-
-                activarBotonesAsignacion();
-
-            });
-
-    }
-
-    /* =========================
-       SELECT ASIGNATURAS
-    ========================= */
+    /* =============================
+       CARGAR SELECT
+    ============================= */
 
     function cargarSelectAsignaturas() {
 
@@ -124,8 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 data = parseData(data);
 
                 const select = document.querySelector("select[name='id_asig']");
-                if (!select) return;
-
                 select.innerHTML = '<option value="">Seleccione</option>';
 
                 data.forEach(asig => {
@@ -135,128 +75,134 @@ document.addEventListener("DOMContentLoaded", function () {
                         ${asig.name}
                     </option>
                     `;
-
                 });
-
             });
-
     }
 
-    /* =========================
+    /* =============================
+       CARGAR ASIGNACIONES
+    ============================= */
+
+    function cargarAsignaciones() {
+
+        fetch("api/asignaciones.php?action=list")
+            .then(res => res.json())
+            .then(data => {
+
+                data = parseData(data);
+
+                const tbody = document.getElementById("tablaAsignaciones");
+                tbody.innerHTML = "";
+
+                data.forEach(a => {
+
+                    tbody.innerHTML += `
+                    <tr>
+                        <td>${a.estudiante}</td>
+                        <td>${a.asignatura}</td>
+                        <td>${a.cod}</td>
+                        <td>${a.teacher}</td>
+                        <td>${a.schedule}</td>
+
+                        <td>
+
+                            <button class="btn btn-warning btn-sm editarAsig" data-id="${a.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+
+                            <button class="btn btn-danger btn-sm eliminarAsig" data-id="${a.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+
+                        </td>
+
+                    </tr>
+                    `;
+                });
+
+                activarBotonesAsignacion();
+            });
+    }
+
+    /* =============================
        GUARDAR ASIGNATURA
-    ========================= */
+    ============================= */
 
-    if (formAsignatura) {
+    formAsignatura.addEventListener("submit", function (e) {
 
-        formAsignatura.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-            e.preventDefault();
+        const formData = new FormData(this);
+        const id = document.getElementById("id_asig").value;
 
-            const formData = new FormData(this);
-            const id = document.getElementById("id_asig").value;
+        formData.append("action", id ? "update" : "save");
 
-            if (id) {
-                formData.append("action", "update");
-            } else {
-                formData.append("action", "save");
-            }
+        fetch("api/asignaturas.php", {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
 
-            fetch("api/asignaturas.php", {
-                method: "POST",
-                body: formData
-            })
-                .then(res => res.json())
-                .then(data => {
+                if (data.success) {
 
-                    if (data.success) {
+                    $('#modalAsignatura').modal('hide');
 
-                        $('#modalAsignatura').modal('hide');
+                    Swal.fire("Guardado", "", "success");
 
-                        Swal.fire(
-                            'Éxito',
-                            'Asignatura guardada',
-                            'success'
-                        );
+                    this.reset();
+                    document.getElementById("id_asig").value = "";
 
-                        this.reset();
-                        document.getElementById("id_asig").value = "";
+                    cargarAsignaturas();
+                    cargarSelectAsignaturas();
+                    cargarAsignaciones();
+                }
+            });
+    });
 
-                        cargarAsignaturas();
-                        cargarSelectAsignaturas();
-                        cargarAsignaciones();
-
-                    } else {
-
-                        Swal.fire("Error", data.error, "error");
-
-                    }
-
-                });
-
-        });
-
-    }
-
-    /* =========================
+    /* =============================
        GUARDAR ASIGNACION
-    ========================= */
+    ============================= */
 
-    if (formAsignacion) {
+    formAsignacion.addEventListener("submit", function (e) {
 
-        formAsignacion.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-            e.preventDefault();
+        const formData = new FormData(this);
+        const id = document.getElementById("id_asignacion").value;
 
-            const formData = new FormData(this);
-            const id = document.getElementById("id_asig").value;
+        if (id) {
+            formData.append("action", "update");
+        } else {
+            formData.append("action", "save");
+        }
 
-            if (id) {
-                formData.append("action", "update");
-            } else {
-                formData.append("action", "save");
-            }
+        fetch("api/asignaciones.php", {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
 
-            fetch("api/asignaciones.php", {
-                method: "POST",
-                body: formData
-            })
-                .then(res => res.json())
-                .then(data => {
+                if (data.success) {
 
-                    if (data.success) {
+                    Swal.fire("Guardado", "", "success");
 
-                        Swal.fire(
-                            'Éxito',
-                            'Asignación guardada',
-                            'success'
-                        );
+                    this.reset();
+                    document.getElementById("id_asignacion").value = "";
 
-                        this.reset();
-                        document.getElementById("id_asig").value = "";
+                    cargarAsignaciones();
+                }
+            });
+    });
 
-                        cargarAsignaciones();
-
-                    } else {
-
-                        Swal.fire("Error", data.error, "error");
-
-                    }
-
-                });
-
-        });
-
-    }
-
-    /* =========================
-       BOTONES ASIGNATURAS
-    ========================= */
+    /* =============================
+       BOTONES ASIGNATURA
+    ============================= */
 
     function activarBotonesAsignaturas() {
 
-        /* EDITAR */
-
-        document.querySelectorAll(".btn-editar").forEach(btn => {
+        document.querySelectorAll(".editar").forEach(btn => {
 
             btn.onclick = function () {
 
@@ -273,71 +219,56 @@ document.addEventListener("DOMContentLoaded", function () {
                         document.getElementById("schedule").value = data.schedule;
 
                         $('#modalAsignatura').modal('show');
-
                     });
-
             };
-
         });
 
-        /* ELIMINAR */
-
-        document.querySelectorAll(".btn-eliminar").forEach(btn => {
+        document.querySelectorAll(".eliminar").forEach(btn => {
 
             btn.onclick = function () {
 
                 const id = this.dataset.id;
 
                 Swal.fire({
-                    title: "¿Eliminar asignatura?",
+                    title: "Eliminar?",
                     icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Eliminar"
-                }).then((result) => {
+                    showCancelButton: true
+                }).then(result => {
 
                     if (result.isConfirmed) {
 
                         fetch("api/asignaturas.php?action=delete", {
+
                             method: "POST",
+
                             headers: {
                                 "Content-Type": "application/x-www-form-urlencoded"
                             },
+
                             body: "id=" + id
+
                         })
                             .then(res => res.json())
-                            .then(data => {
+                            .then(() => {
 
-                                if (data.success) {
-
-                                    Swal.fire("Eliminado", "", "success");
-
-                                    cargarAsignaturas();
-                                    cargarSelectAsignaturas();
-                                    cargarAsignaciones();
-
-                                }
+                                cargarAsignaturas();
+                                cargarSelectAsignaturas();
+                                cargarAsignaciones();
 
                             });
-
                     }
-
                 });
-
             };
-
         });
-
     }
 
-    /* =========================
-       BOTONES ASIGNACIONES
-    ========================= */
+    /* =============================
+       BOTONES ASIGNACION
+    ============================= */
 
     function activarBotonesAsignacion() {
 
-        /* EDITAR */
-
-        document.querySelectorAll(".btn-editar-asig").forEach(btn => {
+        document.querySelectorAll(".editarAsig").forEach(btn => {
 
             btn.onclick = function () {
 
@@ -350,81 +281,53 @@ document.addEventListener("DOMContentLoaded", function () {
                         document.querySelector("select[name='id_est']").value = data.id_est;
                         document.querySelector("select[name='id_asig']").value = data.id_asig;
 
-                        document.getElementById("id_asig").value = data.id;
-
+                        document.getElementById("id_asignacion").value = data.id;
                     });
-
             };
-
         });
 
-        /* ELIMINAR */
-
-        document.querySelectorAll(".btn-eliminar-asig").forEach(btn => {
+        document.querySelectorAll(".eliminarAsig").forEach(btn => {
 
             btn.onclick = function () {
 
                 const id = this.dataset.id;
 
-                Swal.fire({
-                    title: "¿Eliminar asignación?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Eliminar"
-                }).then((result) => {
+                fetch("api/asignaciones.php?action=delete", {
 
-                    if (result.isConfirmed) {
+                    method: "POST",
 
-                        fetch("api/asignaciones.php?action=delete", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/x-www-form-urlencoded"
-                            },
-                            body: "id=" + id
-                        })
-                            .then(res => res.json())
-                            .then(data => {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
 
-                                if (data.success) {
+                    body: "id=" + id
 
-                                    Swal.fire("Eliminado", "", "success");
+                })
+                    .then(() => {
 
-                                    cargarAsignaciones();
+                        cargarAsignaciones();
 
-                                }
-
-                            });
-
-                    }
-
-                });
-
+                    });
             };
-
         });
-
     }
 
-    /* =========================
-       BOTON NUEVA ASIGNATURA
-    ========================= */
+    /* =============================
+       BOTON NUEVA
+    ============================= */
 
-    if (btnNueva) {
+    btnNueva.addEventListener("click", function () {
 
-        btnNueva.addEventListener("click", function () {
+        formAsignatura.reset();
+        document.getElementById("id_asig").value = "";
 
-            formAsignatura.reset();
-            document.getElementById("id_asig").value = "";
+        $('#modalAsignatura').modal('show');
 
-            $('#modalAsignatura').modal('show');
+    });
 
-        });
-
-    }
-
-    /* =========================
-       INICIALIZAR
-    ========================= */
+    /* =============================
+       INICIO
+    ============================= */
 
     cargarAsignaturas();
     cargarAsignaciones();

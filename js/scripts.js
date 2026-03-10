@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
 
             if(data.success){
+                Swal.fire("Estudiante agregado", "", "success");
                 $('#modalEstudiante').modal('hide');
                 cargarEstudiantes();
             } else {
@@ -91,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const id = this.dataset.id;
 
-                fetch("api/estudiantes.php?action=get&id=" + id)
+                fetch("api/estudiantes.php?action=getById&id=" + id)
                 .then(res => res.json())
                 .then(data => {
 
@@ -101,6 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("age").value = data.age;
 
                     $('#modalEstudiante').modal('show');
+
                 });
             };
         });
@@ -108,30 +110,61 @@ document.addEventListener("DOMContentLoaded", function () {
         // ELIMINAR
         document.querySelectorAll(".btn-eliminar").forEach(btn => {
 
-            btn.onclick = function(){
+            btn.onclick = function () {
 
                 const id = this.dataset.id;
 
-                if(confirm("¿Seguro que deseas eliminar este registro?")){
+                Swal.fire({
+                    title: "¿Seguro que deseas eliminar este registro?",
+                    text: "Esta acción no se puede deshacer",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar",
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6"
+                }).then((result) => {
 
-                    fetch("api/estudiantes.php?action=delete", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded"
-                        },
-                        body: "id=" + id + "&action=delete"
-                    })
-                    .then(res => res.json())
-                    .then(data => {
+                    if (result.isConfirmed) {
 
-                        if(data.success){
-                            cargarEstudiantes();
-                        } else {
-                            alert("Error: " + data.error);
-                        }
-                    });
-                }
+                        fetch("api/estudiantes.php?action=delete", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: "id=" + id + "&action=delete"
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+
+                            if (data.success) {
+
+                                Swal.fire(
+                                    "Eliminado",
+                                    "El registro fue eliminado correctamente",
+                                    "success"
+                                );
+
+                                cargarEstudiantes();
+
+                            } else {
+
+                                Swal.fire(
+                                    "Error",
+                                    data.error,
+                                    "error"
+                                );
+
+                            }
+
+                        });
+
+                    }
+
+                });
+
             };
+
         });
     }
 
@@ -140,10 +173,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // =========================
     btnBuscar.addEventListener("click", function(){
 
-        const id = document.getElementById("buscarId").value;
+        const id = document.getElementById("buscarCedula").value;
 
         if(id === ""){
-            alert("Ingresa un ID");
+            Swal.fire(
+                                    "Error",
+                                    "Debe ingresar la cedula",
+                                    "error"
+                                );
             return;
         }
 

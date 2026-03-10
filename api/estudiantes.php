@@ -22,19 +22,45 @@ try {
             break;
 
         // =============================
-        // OBTENER UNO (EDITAR)
+        // BUSCAR POR CEDULA
         // =============================
         case "get":
 
-            $id = $_GET['id'] ?? 0;
+            $identity = $_GET['id'] ?? '';
 
-            $stmt = $myPDO->prepare("SELECT * FROM Estudiante WHERE identity = ?");
-            $stmt->execute([$id]);
+            $stmt = $myPDO->prepare("
+                SELECT id_est, name, identity, age
+                FROM Estudiante
+                WHERE identity = ?
+            ");
+
+            $stmt->execute([$identity]);
+
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
             echo json_encode($data);
-            break;
 
+        break;
+        // =============================
+        // OBTENER POR ID (EDITAR)
+        // =============================
+        case "getById":
+
+            $id = $_GET['id'] ?? 0;
+
+            $stmt = $myPDO->prepare("
+                SELECT id_est, name, identity, age
+                FROM Estudiante
+                WHERE id_est = ?
+            ");
+
+            $stmt->execute([$id]);
+
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            echo json_encode($data);
+
+        break;
         // =============================
         // GUARDAR (INSERT / UPDATE)
         // =============================
