@@ -183,17 +183,26 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(res => res.json())
             .then(data => {
+            if(data.success){
 
-                if (data.success) {
+                Swal.fire("Guardado","","success");
 
-                    Swal.fire("Guardado", "", "success");
+                this.reset();
+                document.getElementById("id_asignacion").value="";
 
-                    this.reset();
-                    document.getElementById("id_asignacion").value = "";
+                cargarAsignaciones();
 
-                    cargarAsignaciones();
-                }
-            });
+            } else {
+
+                Swal.fire({
+                    icon: "warning",
+                    title: "No se puede asignar en ese horario",
+                    text: data.error
+                });
+
+            }
+
+        });
     });
 
     /* =============================
@@ -261,6 +270,34 @@ document.addEventListener("DOMContentLoaded", function () {
             };
         });
     }
+    
+    function cargarSelectAsignaturasEditar(idActual){
+
+        fetch("api/asignaturas.php?action=list")
+        .then(res => res.json())
+        .then(data => {
+
+            const select = document.querySelector("select[name='id_asig']");
+            select.innerHTML = '<option value="">Seleccione</option>';
+
+            data.forEach(asig => {
+
+                // 🔥 FILTRO: excluir la actual
+                if(asig.id_asig != idActual){
+
+                    select.innerHTML += `
+                        <option value="${asig.id_asig}">
+                            ${asig.name}
+                        </option>
+                    `;
+
+                }
+
+            });
+
+        });
+
+    }
 
     /* =============================
        BOTONES ASIGNACION
@@ -275,14 +312,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 const id = this.dataset.id;
 
                 fetch("api/asignaciones.php?action=get&id=" + id)
-                    .then(res => res.json())
-                    .then(data => {
+                .then(res => res.json())
+                .then(data => {
 
-                        document.querySelector("select[name='id_est']").value = data.id_est;
-                        document.querySelector("select[name='id_asig']").value = data.id_asig;
+                    // set estudiante
+                    document.querySelector("select[name='id_est']").value = data.id_est;
 
-                        document.getElementById("id_asignacion").value = data.id;
-                    });
+                    // cargar asignaturas SIN la actual
+                    cargarSelectAsignaturasEditar(data.id_asig);
+
+                    // guardar id de la asignación
+                    document.getElementById("id_asignacion").value = data.id;
+
+                });
+
             };
         });
 
@@ -292,22 +335,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const id = this.dataset.id;
 
-                fetch("api/asignaciones.php?action=delete", {
+                Swal.fire({
+                    title: "¿Eliminar asignación?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
 
-                    method: "POST",
+                    if (result.isConfirmed) {
 
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
+                        fetch("api/asignaciones.php?action=delete", {
 
-                    body: "id=" + id
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
 
-                })
-                    .then(() => {
+                            body: "id=" + id
 
-                        cargarAsignaciones();
+                        })
+                        .then(res => res.json())
+                        .then(data => {
 
-                    });
+                            if (data.success) {
+
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Asignación eliminada",
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+
+                                cargarAsignaciones();
+
+                            } else {
+
+                                Swal.fire("Error", data.error, "error");
+
+                            }
+
+                        });
+
+                    }
+
+                });
+
             };
         });
     }

@@ -14,7 +14,7 @@ try {
         // =============================
         case "list":
 
-            $stmt = $myPDO->prepare("SELECT id_est, name, identity, age FROM Estudiante");
+            $stmt = $myPDO->prepare("SELECT id_est, name, identity, age FROM estudiante");
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -30,7 +30,7 @@ try {
 
             $stmt = $myPDO->prepare("
                 SELECT id_est, name, identity, age
-                FROM Estudiante
+                FROM estudiante
                 WHERE identity = ?
             ");
 
@@ -50,7 +50,7 @@ try {
 
             $stmt = $myPDO->prepare("
                 SELECT id_est, name, identity, age
-                FROM Estudiante
+                FROM estudiante
                 WHERE id_est = ?
             ");
 
@@ -74,13 +74,13 @@ try {
             if(empty($id)){
                 // INSERT
                 $stmt = $myPDO->prepare(
-                    "INSERT INTO Estudiante (name, identity, age) VALUES (?, ?, ?)"
+                    "INSERT INTO estudiante (name, identity, age) VALUES (?, ?, ?)"
                 );
                 $stmt->execute([$name, $identity, $age]);
             } else {
                 // UPDATE
                 $stmt = $myPDO->prepare(
-                    "UPDATE Estudiante SET name=?, identity=?, age=? WHERE id_est=?"
+                    "UPDATE estudiante SET name=?, identity=?, age=? WHERE id_est=?"
                 );
                 $stmt->execute([$name, $identity, $age, $id]);
             }
@@ -95,7 +95,7 @@ try {
 
             $id = $_POST['id'] ?? 0;
 
-            $stmt = $myPDO->prepare("DELETE FROM Estudiante WHERE id_est = ?");
+            $stmt = $myPDO->prepare("DELETE FROM estudiante WHERE id_est = ?");
             $stmt->execute([$id]);
 
             echo json_encode(["success" => true]);

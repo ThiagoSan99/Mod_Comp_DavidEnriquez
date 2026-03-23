@@ -100,7 +100,7 @@ require_once("Conection/conect.php");
                                         <option value="">Seleccione</option>
 
                                         <?php
-                                        $stmt = $myPDO->query("SELECT id_est, name FROM Estudiante");
+                                        $stmt = $myPDO->query("SELECT id_est, name FROM estudiante");
 
                                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                             echo "<option value='{$row['id_est']}'>{$row['name']}</option>";

@@ -1,8 +1,8 @@
 <?php
-$hostDB = '127.0.0.1';
+$hostDB = 'db'; 
 $nameDB = 'mod_comp';
-$userDB = 'Sant_Admin';
-$pwDB = '12345';
+$userDB = 'user';
+$pwDB = 'password';
 
 try {
     $hostPDO = "mysql:host=$hostDB;dbname=$nameDB;charset=utf8";
