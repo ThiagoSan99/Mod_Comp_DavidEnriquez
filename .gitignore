@@ -1,0 +1,68 @@
+# =========================
+# Sistema / OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDEs / Editores
+# =========================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+
+# =========================
+# Archivos temporales
+# =========================
+tmp/
+temp/
+*.tmp
+
+# =========================
+# Variables de entorno (MUY IMPORTANTE)
+# =========================
+.env
+.env.*
+
+# =========================
+# Dependencias (si usas Node)
+# =========================
+node_modules/
+npm-debug.log
+
+# =========================
+# Archivos de base de datos
+# =========================
+*.sql
+*.sqlite
+
+# =========================
+# Archivos generados por Docker
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Backups
+# =========================
+*.bak
+*.backup
+
+# =========================
+# Archivos innecesarios
+# =========================
+*.md
+*.txt
+
+# =========================
+# XAMPP / entorno local
+# =========================
+xampp/

@@ -1,0 +1,38 @@
+# Git
+.git
+.gitignore
+
+# Node (por si tienes frontend)
+node_modules
+npm-debug.log
+
+# Logs
+*.log
+logs/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Configuración local
+.env
+.env.*
+
+# Docker (evitar conflictos)
+docker-compose.yml
+
+# Archivos temporales
+tmp/
+temp/
+*.tmp
+
+# IDEs
+.vscode/
+.idea/
+
+# Archivos innecesarios
+*.md
+*.txt
+
+# Base de datos local (si existe)
+*.sql

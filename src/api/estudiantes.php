@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . "/../Conection/conect.php");
+require_once __DIR__ . '/../Connection/connect.php';
 
 header("Content-Type: application/json");
 

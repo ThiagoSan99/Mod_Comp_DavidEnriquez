@@ -1,0 +1,3 @@
+RewriteEngine On
+
+RewriteRule ^api/(.*)$ /var/www/html/src/api/$1 [L]

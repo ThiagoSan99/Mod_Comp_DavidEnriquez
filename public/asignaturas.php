@@ -1,5 +1,5 @@
 <?php
-require_once("Conection/conect.php");
+include __DIR__ . '/../src/Connection/connect.php';
 ?>
 
 <!DOCTYPE html>
@@ -21,8 +21,8 @@ require_once("Conection/conect.php");
 
 <div class="wrapper">
 
-    <?php include("navbar.php"); ?>
-    <?php include("sidebar.php"); ?>
+    <?php include __DIR__ . '/../src/views/navbar.php'; ?>
+    <?php include __DIR__ . '/../src/views/sidebar.php'; ?>
 
     <div class="content-wrapper">
 
@@ -323,7 +323,7 @@ require_once("Conection/conect.php");
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script src="js/asignaturas.js"></script>
+<script src="/js/asignaturas.js"></script>
 
 </body>
 </html>

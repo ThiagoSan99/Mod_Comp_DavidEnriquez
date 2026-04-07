@@ -18,8 +18,9 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-    <?php include "navbar.php"; ?>
-    <?php include "sidebar.php"; ?>
+    <?php include __DIR__ . '/../src/views/navbar.php'; ?>
+    <?php include __DIR__ . '/../src/views/sidebar.php'; ?>
+
 
     <!-- ============================= -->
     <!-- CONTENIDO PRINCIPAL -->
@@ -151,7 +152,7 @@
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- TU SCRIPT -->
-<script src="js/scripts.js"></script>
+<script src="./js/scripts.js"></script>
 
 
 </body>

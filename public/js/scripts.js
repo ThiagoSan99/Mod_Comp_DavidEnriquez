@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // =========================
     function cargarEstudiantes() {
 
-        fetch("api/estudiantes.php?action=list")
+        fetch("/api/estudiantes.php?action=list")
         .then(res => res.json())
         .then(data => {
 

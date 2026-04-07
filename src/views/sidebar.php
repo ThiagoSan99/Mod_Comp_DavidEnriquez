@@ -17,7 +17,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="asignaturas.php" class="nav-link">
+                    <a href="/asignaturas.php" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>
                         <p>Asignaturas</p>
                     </a>
